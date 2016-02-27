@@ -7,7 +7,7 @@
  
 /*
 Plugin Name: PADMA ThriveLeads Integration
-Plugin URI: http://github.com/dwaynemac/padma_thriveleads_integration
+Plugin URI: http://github.com/dwaynemac/padma-thriveleads-integration-plugin
 Description: Make ThriveLeads forms forward fields to PADMA CRM.
 Author: Dwayne Macgowan
 Version: 0.1
@@ -55,7 +55,7 @@ function padma_tvi_padma_thriveleads_integration_deactivated(){
 };
 */
 
-#add_action( 'admin_menu', 'padma_tvi_custom_menu');
+add_action( 'admin_menu', 'padma_tvi_custom_menu');
 function padma_tvi_custom_menu(){
   add_options_page(
     'PADMA Configuration',
@@ -70,7 +70,11 @@ function padma_tvi_options_page_callback(){
       ?>
     <div class="wrap">
         <h2>My Plugin Options</h2>
-        your form goes here
+        <form method="post" action="options.php">
+          <?php settings_fields('pluginPage'); ?>
+          <?php do_settings_sections( 'pluginPage' ); ?>
+          <?php submit_button(); ?>
+        </form>
     </div>
     <?php
 };
@@ -81,18 +85,18 @@ function padma_tvi_settings_init(){
     'padma_tvi_settings_section',
     'PADMA-ThriveLeads Integration Configuration',
     'padma_tvi_settings_callback',
-    'general'
+    'pluginPage'
   );
   
   add_settings_field(
     'padma_tvi_api_key',
     'PADMA API KEY',
     'padma_tvi_api_key_setting_callback',
-    'general',
+    'pluginPage',
     'padma_tvi_settings_section'
   );
   
-  register_setting('general','padma_tvi_api_key','padma_tvi_api_key_sanitize_callback');
+  register_setting('pluginPage','padma_tvi_api_key','padma_tvi_api_key_sanitize_callback');
 };
 
 function padma_tvi_settings_callback(){
